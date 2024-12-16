@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Tareas</title>
+    <!-- Enlazar archivo CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Lista de Tareas</h1>
+
+        <!-- Formulario para agregar tareas -->
+        <h2>Agregar tarea</h2>
+        <form method="POST" action="/add_task">
+            <label for="title">Título:</label>
+            <input type="text" id="title" name="title" required>
+
+            <label for="description">Descripción:</label>
+            <input type="text" id="description" name="description" required>
+
+            <button type="submit">Agregar tarea</button>
+        </form>
+
+        <h2>Tareas:</h2>
+        <ul>
+            {% for task in tasks %}
+                <li>
+                    <strong>{{ task.title }}</strong><br>
+                    {{ task.description }}<br>
+                    <span class="{{ 'completed' if task.done else 'pending' }}">
+                        {{ 'Completada' if task.done else 'Pendiente' }}
+                    </span>
+                    
+                    {% if not task.done %}
+                        <form method="POST" action="{{ url_for('complete_task', task_id=task.id) }}" style="display:inline;">
+                            <button type="submit">Marcar como completada</button>
+                        </form>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
+
